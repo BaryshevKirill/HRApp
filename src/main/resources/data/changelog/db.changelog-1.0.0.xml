@@ -1,0 +1,91 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="Kirill">
+        <createTable tableName="Users">
+            <column name="id" type="INT" autoIncrement="true" incrementBy="1" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="user_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="user_login" type="varchar(32)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="password" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="is_active" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="navi_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable  tableName="Users"/>
+        </rollback>
+
+    </changeSet>
+
+    <changeSet id="2" author="Kirill">
+        <createTable tableName="interview_info">
+            <column name="id" type="INT" autoIncrement="true" incrementBy="1" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="user_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_user_id" references="users(id)"/>
+            </column>
+
+            <column name="colleague_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="colleague_start_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="days_before_interview" type="INT" defaultValue="0">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="interview_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="navi_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable  tableName="interview_info"/>
+        </rollback>
+
+    </changeSet>
+
+    <!--<changeSet id="7" author="Kirill">-->
+        <!--<sql>-->
+            <!--ALTER TABLE interview_info ADD CONSTRAINT UNIQUE (product_name, producer)-->
+        <!--</sql>-->
+    <!--</changeSet>-->
+
+    <!--<changeSet id="9" author="Kirill">-->
+        <!--<sql>-->
+            <!--alter table interview_info add CHECK (fat + proteins + carbohydrate &lt;= 100);-->
+        <!--</sql>-->
+    <!--</changeSet>-->
+
+</databaseChangeLog>
