@@ -1,4 +1,4 @@
-package ru.baryshev.kirill.models;
+package ru.baryshev.kirill.entities;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "roles")
 @Data
-public class Role {
+public class RoleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

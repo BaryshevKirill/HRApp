@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import ru.baryshev.kirill.models.Users;
+import ru.baryshev.kirill.entities.UserEntity;
 
 @Getter
 @Setter
@@ -24,6 +24,6 @@ public class UsersDto {
         @Mapping(target = "userId", source = "id")
         @Mapping(target = "userName")
         @Mapping(target = "userLogin")
-        UsersDto from(Users user);
+        UsersDto from(UserEntity user);
     }
 }

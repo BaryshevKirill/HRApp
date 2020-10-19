@@ -1,6 +1,5 @@
 package ru.baryshev.kirill.dto.users;
 
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.lang.NonNull;
-import ru.baryshev.kirill.models.Users;
+import ru.baryshev.kirill.entities.UserEntity;
 
 @Setter
 @Getter
@@ -38,6 +37,6 @@ public class CreateUserDto {
         @Mapping(target = "userPassword")
         @Mapping(target = "userRole")
         @Mapping(target = "isActive")
-        CreateUserDto from(Users user);
+        CreateUserDto from(UserEntity user);
     }
 }

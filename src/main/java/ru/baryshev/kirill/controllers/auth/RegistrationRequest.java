@@ -1,4 +1,4 @@
-package ru.baryshev.kirill.RestControllers;
+package ru.baryshev.kirill.controllers.auth;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package ru.baryshev.kirill.models;
+package ru.baryshev.kirill.entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name = "interview_info")
 @Getter
 @Setter
-public class InterviewInfo implements Serializable {
+public class InterviewInfoEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class InterviewInfo implements Serializable {
 
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")
-//    private Users userId;
+//    private UserEntity userId;
 
     @Column(name = "user_id")
     private Long userId;

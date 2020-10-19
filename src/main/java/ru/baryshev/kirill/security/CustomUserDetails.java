@@ -1,11 +1,9 @@
 package ru.baryshev.kirill.security;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.baryshev.kirill.dto.users.CreateUserDto;
-import ru.baryshev.kirill.models.Users;
 
 import java.util.Collection;
 import java.util.Collections;

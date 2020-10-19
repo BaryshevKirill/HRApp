@@ -1,12 +1,12 @@
 package ru.baryshev.kirill.dto.interviewinfo;
 
-import ru.baryshev.kirill.models.Users;
+import ru.baryshev.kirill.entities.UserEntity;
 
 import java.util.Date;
 
 public class InterviewInfoDto {
 
-    private Users userId;
+    private UserEntity userId;
 
     private String colleagueName;
 
@@ -17,5 +17,4 @@ public class InterviewInfoDto {
     private Date interviewDate;
 
     private Date naviDate;
-
 }

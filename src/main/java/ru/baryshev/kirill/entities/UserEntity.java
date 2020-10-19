@@ -1,4 +1,4 @@
-package ru.baryshev.kirill.models;
+package ru.baryshev.kirill.entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +20,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "users")
-public class Users {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +45,7 @@ public class Users {
     private Date naviDate;
 
 //    @OneToMany(mappedBy = "userId"/*, cascade = CascadeType.ALL*/)
-//    private List<InterviewInfo> interviewInfo;
+//    private List<InterviewInfoEntity> interviewInfo;
 
     public static Converter CONVERTER = Mappers.getMapper(Converter.class);
 
@@ -55,6 +55,6 @@ public class Users {
         @Mapping(target = "userName")
         @Mapping(target = "userLogin")
         @Mapping(target = "userPassword")
-        Users from(CreateUserDto createUserDto);
+        UserEntity from(CreateUserDto createUserDto);
     }
 }

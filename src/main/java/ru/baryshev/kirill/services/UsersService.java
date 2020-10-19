@@ -1,14 +1,14 @@
-package ru.baryshev.kirill.Services;
+package ru.baryshev.kirill.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.baryshev.kirill.Repositories.RoleEntityRepository;
-import ru.baryshev.kirill.Repositories.UsersRepository;
+import ru.baryshev.kirill.entities.UserEntity;
+import ru.baryshev.kirill.repositories.RoleEntityRepository;
+import ru.baryshev.kirill.repositories.UsersRepository;
 import ru.baryshev.kirill.dto.users.CreateUserDto;
 import ru.baryshev.kirill.dto.users.UsersDto;
-import ru.baryshev.kirill.models.Users;
 
 import java.util.NoSuchElementException;
 
@@ -25,8 +25,8 @@ public class UsersService {
     private PasswordEncoder passwordEncoder;
 
     public UsersDto createUser(CreateUserDto createUserDto) {
-        Users usersEntity;
-        usersEntity = Users.CONVERTER.from(createUserDto);
+        UserEntity usersEntity;
+        usersEntity = UserEntity.CONVERTER.from(createUserDto);
         usersEntity.setUserRole(roleEntityRepository.findByName("ROLE_USER").getId());
         usersEntity.setUserPassword(passwordEncoder.encode(createUserDto.getUserPassword()));
         usersEntity = usersRepository.save(usersEntity);
