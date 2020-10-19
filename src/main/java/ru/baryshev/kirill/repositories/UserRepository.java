@@ -8,7 +8,7 @@ import ru.baryshev.kirill.entities.UserEntity;
 import java.util.Optional;
 
 @Repository
-public interface UsersRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByUserName(String userName);
 

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.baryshev.kirill.entities.RoleEntity;
 
 @Repository
-public interface RoleEntityRepository extends JpaRepository<RoleEntity, Long> {
+public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 
     RoleEntity findByName(String name);
 

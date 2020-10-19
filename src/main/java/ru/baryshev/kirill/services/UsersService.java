@@ -5,8 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.baryshev.kirill.entities.UserEntity;
-import ru.baryshev.kirill.repositories.RoleEntityRepository;
-import ru.baryshev.kirill.repositories.UsersRepository;
+import ru.baryshev.kirill.repositories.RoleRepository;
+import ru.baryshev.kirill.repositories.UserRepository;
 import ru.baryshev.kirill.dto.users.CreateUserDto;
 import ru.baryshev.kirill.dto.users.UsersDto;
 
@@ -17,36 +17,36 @@ import java.util.NoSuchElementException;
 public class UsersService {
 
     @Autowired
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     @Autowired
-    private RoleEntityRepository roleEntityRepository;
+    private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public UsersDto createUser(CreateUserDto createUserDto) {
         UserEntity usersEntity;
         usersEntity = UserEntity.CONVERTER.from(createUserDto);
-        usersEntity.setUserRole(roleEntityRepository.findByName("ROLE_USER").getId());
+        usersEntity.setUserRole(roleRepository.findByName("ROLE_USER").getId());
         usersEntity.setUserPassword(passwordEncoder.encode(createUserDto.getUserPassword()));
-        usersEntity = usersRepository.save(usersEntity);
+        usersEntity = userRepository.save(usersEntity);
         return UsersDto.CONVERTER.from(usersEntity);
     }
 
     public CreateUserDto findByName(String userName) {
-        return CreateUserDto.CONVERTER.from(usersRepository
+        return CreateUserDto.CONVERTER.from(userRepository
                 .findByUserName(userName)
                 .orElseThrow(() -> new NoSuchElementException("Not found in DB users with name " + userName)));
     }
 
     public UsersDto findById(Long userId) {
-        return UsersDto.CONVERTER.from(usersRepository
+        return UsersDto.CONVERTER.from(userRepository
                 .findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Not found in DB users with ID " + userId)));
     }
 
     public CreateUserDto findByLogin(String login) {
-        return CreateUserDto.CONVERTER.from(usersRepository
+        return CreateUserDto.CONVERTER.from(userRepository
                 .findByUserLogin(login));
     }
 
