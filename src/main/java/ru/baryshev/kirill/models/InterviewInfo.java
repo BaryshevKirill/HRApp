@@ -1,37 +1,44 @@
 package ru.baryshev.kirill.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "interview_info")
 @Getter
 @Setter
-@AllArgsConstructor
-public class InterviewInfo {
+public class InterviewInfo implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users userId;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private Users userId;
 
-    @Column(name = "colleague_name", insertable = false)
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "colleague_name")
     private String colleagueName;
 
-    @Column(name = "colleague_start_date", insertable = false)
+    @Column(name = "colleague_start_date")
     private Date startDate;
 
-    @Column(name = "days_before_interview", insertable = false)
+    @Column(name = "days_before_interview")
     private Integer daysBeforeInterview;
 
-    @Column(name = "interview_date", insertable = false)
+    @Column(name = "interview_date")
     private Date interviewDate;
 
     @Column(name = "navi_date", insertable = false)
