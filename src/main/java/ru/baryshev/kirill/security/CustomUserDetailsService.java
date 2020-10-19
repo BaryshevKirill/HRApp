@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import ru.baryshev.kirill.dto.users.FullUserDto;
 import ru.baryshev.kirill.services.UsersService;
-import ru.baryshev.kirill.dto.users.CreateUserDto;
 
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
@@ -15,7 +15,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public CustomUserDetails loadUserByUsername(String userLogin) throws UsernameNotFoundException {
-        CreateUserDto userEntity = usersService.findByName(userLogin);
+        FullUserDto userEntity = usersService.findByName(userLogin);
         return CustomUserDetails.fromUserEntityToCustomUserDetails(userEntity);
     }
 }

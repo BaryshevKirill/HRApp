@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import ru.baryshev.kirill.dto.users.CreateUserDto;
+import ru.baryshev.kirill.dto.users.FullUserDto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,6 +55,6 @@ public class UserEntity {
         @Mapping(target = "userName")
         @Mapping(target = "userLogin")
         @Mapping(target = "userPassword")
-        UserEntity from(CreateUserDto createUserDto);
+        UserEntity from(FullUserDto fullUserDto);
     }
 }

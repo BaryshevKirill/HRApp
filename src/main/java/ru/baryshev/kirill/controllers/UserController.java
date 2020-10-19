@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.baryshev.kirill.dto.users.FullUserDto;
 import ru.baryshev.kirill.services.UsersService;
-import ru.baryshev.kirill.dto.users.CreateUserDto;
 import ru.baryshev.kirill.dto.users.UsersDto;
 
 import javax.validation.Valid;
@@ -21,13 +21,13 @@ public class UserController {
     UsersService usersService;
 
     @PostMapping("/create")
-    public CreateUserDto createUser(@Valid @RequestBody CreateUserDto createUserDto) {
-        usersService.createUser(createUserDto);
-        return createUserDto;
+    public FullUserDto createUser(@Valid @RequestBody FullUserDto fullUserDto) {
+        usersService.createUser(fullUserDto);
+        return fullUserDto;
     }
 
     @GetMapping("/findByName/{name}")
-    public CreateUserDto findUserByName(@PathVariable(value = "name") String userName) {
+    public FullUserDto findUserByName(@PathVariable(value = "name") String userName) {
         return usersService.findByName(userName);
     }
 

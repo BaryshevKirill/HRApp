@@ -3,7 +3,7 @@ package ru.baryshev.kirill.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.baryshev.kirill.dto.users.CreateUserDto;
+import ru.baryshev.kirill.dto.users.FullUserDto;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -15,7 +15,7 @@ public class CustomUserDetails implements UserDetails {
     private Collection<? extends GrantedAuthority> grantedAuthorities;
     private Boolean isActive;
 
-    public static CustomUserDetails fromUserEntityToCustomUserDetails(CreateUserDto userEntity) {
+    public static CustomUserDetails fromUserEntityToCustomUserDetails(FullUserDto userEntity) {
         CustomUserDetails c = new CustomUserDetails();
         c.login = userEntity.getUserLogin();
         c.password = userEntity.getUserPassword();

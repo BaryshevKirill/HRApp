@@ -8,7 +8,7 @@
     <artifactId>ru.baryshev.kirill</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>timetrackertask</name>
+    <name>HRApp</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
@@ -113,26 +113,6 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
-
-        <!--Security-->
-        <!--<dependency>-->
-            <!--<groupId>io.jsonwebtoken</groupId>-->
-            <!--<artifactId>jjwt</artifactId>-->
-            <!--<version>0.9.0</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>com.auth0</groupId>-->
-            <!--<artifactId>auth0</artifactId>-->
-            <!--<version>1.5.0</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>com.auth0</groupId>-->
-            <!--<artifactId>auth0-spring-security-api</artifactId>-->
-            <!--<version>1.0.0</version>-->
-        <!--</dependency>-->
-
 
     </dependencies>
 

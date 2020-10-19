@@ -11,7 +11,7 @@ import ru.baryshev.kirill.entities.UserEntity;
 
 @Setter
 @Getter
-public class CreateUserDto {
+public class FullUserDto {
 
     @NonNull
     private String userName;
@@ -37,6 +37,6 @@ public class CreateUserDto {
         @Mapping(target = "userPassword")
         @Mapping(target = "userRole")
         @Mapping(target = "isActive")
-        CreateUserDto from(UserEntity user);
+        FullUserDto from(UserEntity user);
     }
 }

@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.baryshev.kirill.dto.users.FullUserDto;
 import ru.baryshev.kirill.services.UsersService;
-import ru.baryshev.kirill.dto.users.CreateUserDto;
 import ru.baryshev.kirill.security.JwtProvider;
 
 import javax.validation.Valid;
@@ -20,7 +20,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) {
-        CreateUserDto u = new CreateUserDto();
+        FullUserDto u = new FullUserDto();
         u.setUserPassword(registrationRequest.getPassword());
         u.setUserLogin(registrationRequest.getLogin());
         u.setUserName(registrationRequest.getUserName());
@@ -30,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/auth")
         public AuthResponse auth(@RequestBody AuthRequest request) {
-        CreateUserDto userEntity = userService.findByLoginAndPassword(request.getLogin(), request.getPassword());
+        FullUserDto userEntity = userService.findByLoginAndPassword(request.getLogin(), request.getPassword());
         String token = jwtProvider.generateToken(userEntity.getUserLogin());
         return new AuthResponse(token);
     }

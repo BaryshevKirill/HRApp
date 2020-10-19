@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.baryshev.kirill.dto.users.FullUserDto;
 import ru.baryshev.kirill.entities.UserEntity;
 import ru.baryshev.kirill.repositories.RoleRepository;
 import ru.baryshev.kirill.repositories.UserRepository;
-import ru.baryshev.kirill.dto.users.CreateUserDto;
 import ru.baryshev.kirill.dto.users.UsersDto;
 
 import java.util.NoSuchElementException;
@@ -24,17 +24,17 @@ public class UsersService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UsersDto createUser(CreateUserDto createUserDto) {
+    public UsersDto createUser(FullUserDto fullUserDto) {
         UserEntity usersEntity;
-        usersEntity = UserEntity.CONVERTER.from(createUserDto);
+        usersEntity = UserEntity.CONVERTER.from(fullUserDto);
         usersEntity.setUserRole(roleRepository.findByName("ROLE_USER").getId());
-        usersEntity.setUserPassword(passwordEncoder.encode(createUserDto.getUserPassword()));
+        usersEntity.setUserPassword(passwordEncoder.encode(fullUserDto.getUserPassword()));
         usersEntity = userRepository.save(usersEntity);
         return UsersDto.CONVERTER.from(usersEntity);
     }
 
-    public CreateUserDto findByName(String userName) {
-        return CreateUserDto.CONVERTER.from(userRepository
+    public FullUserDto findByName(String userName) {
+        return FullUserDto.CONVERTER.from(userRepository
                 .findByUserName(userName)
                 .orElseThrow(() -> new NoSuchElementException("Not found in DB users with name " + userName)));
     }
@@ -45,14 +45,14 @@ public class UsersService {
                 .orElseThrow(() -> new NoSuchElementException("Not found in DB users with ID " + userId)));
     }
 
-    public CreateUserDto findByLogin(String login) {
-        return CreateUserDto.CONVERTER.from(userRepository
+    public FullUserDto findByLogin(String login) {
+        return FullUserDto.CONVERTER.from(userRepository
                 .findByUserLogin(login));
     }
 
-    public CreateUserDto findByLoginAndPassword(String login, String password) {
+    public FullUserDto findByLoginAndPassword(String login, String password) {
 
-        CreateUserDto userEntity = findByLogin(login);
+        FullUserDto userEntity = findByLogin(login);
         if (userEntity != null) {
             if (passwordEncoder.matches(password, userEntity.getUserPassword())) {
                 return userEntity;
