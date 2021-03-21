@@ -11,13 +11,13 @@ import javax.persistence.Table;
 
 @Entity
 @Data
-@Table(name = "roles")
-public class RoleEntity {
+@Table(name = "control_point_statuses")
+public class ControlPointStatusesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private String name;
+    private String def;
 }

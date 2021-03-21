@@ -2,16 +2,14 @@ package ru.baryshev.kirill.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-import ru.baryshev.kirill.dto.users.FullUserDto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -35,18 +33,19 @@ public class UserEntity {
     @Column(name = "user_password")
     private String userPassword;
 
-    @Column(name = "user_role_id")
-    private Long userRole;
-
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = true;
 
     @Column(name = "navi_date", insertable = false)
     private Date naviDate;
 
-//    @OneToMany(mappedBy = "userId"/*, cascade = CascadeType.ALL*/)
-//    private List<InterviewInfoEntity> interviewInfo;
+    @ManyToOne
+    @JoinColumn(name = "user_role_id")
+    private RoleEntity roleEntity;
 
+//    @OneToMany(mappedBy = "userId"/*, cascade = CascadeType.ALL*/)
+//    private List<ColleguesInfoEntity> interviewInfo;
+/*
     public static Converter CONVERTER = Mappers.getMapper(Converter.class);
 
     @Mapper
@@ -56,5 +55,5 @@ public class UserEntity {
         @Mapping(target = "userLogin")
         @Mapping(target = "userPassword")
         UserEntity from(FullUserDto fullUserDto);
-    }
+    }*/
 }

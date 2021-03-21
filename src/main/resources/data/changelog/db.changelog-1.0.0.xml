@@ -4,6 +4,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+    <!--Таблица ролей пользователей (HR)-->
     <changeSet id="1" author="Kirill">
         <createTable tableName="roles">
             <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1" startWith="1">
@@ -17,13 +18,14 @@
         </createTable>
 
         <rollback>
-            <dropTable  tableName="roles"/>
+            <dropTable tableName="roles"/>
         </rollback>
 
     </changeSet>
 
+    <!--Таблица пользователей (HR)-->
     <changeSet id="2" author="Kirill">
-        <createTable tableName="userEntity">
+        <createTable tableName="users">
             <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1" startWith="1">
                 <constraints primaryKey="true"/>
             </column>
@@ -44,6 +46,10 @@
                 <constraints nullable="false" foreignKeyName="fk_role_id" references="roles(id)"/>
             </column>
 
+            <!--<column name="user_role_id" type="varchar(32)">-->
+            <!--<constraints nullable="false" foreignKeyName="fk_role_id" references="roles(name)"/>-->
+            <!--</column>-->
+
             <column name="is_active" type="BOOLEAN" defaultValueBoolean="true">
                 <constraints nullable="false"/>
             </column>
@@ -55,34 +61,85 @@
         </createTable>
 
         <rollback>
-            <dropTable  tableName="Users"/>
+            <dropTable tableName="Users"/>
         </rollback>
 
     </changeSet>
 
+    <!--Таблица должностей-->
     <changeSet id="3" author="Kirill">
-        <createTable tableName="interview_info">
+        <createTable tableName="positions">
+            <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="def" type="varchar(30)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="navi_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="positions"/>
+        </rollback>
+
+    </changeSet>
+
+    <!--Таблица отделов-->
+    <changeSet id="4" author="Kirill">
+        <createTable tableName="departments">
+            <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="def" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="navi_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="departments"/>
+        </rollback>
+
+    </changeSet>
+
+    <!--Таблица информацуии о кандидатах-->
+    <changeSet id="5" author="Kirill">
+        <createTable tableName="collegues_info">
             <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1" startWith="1">
                 <constraints primaryKey="true"/>
             </column>
 
             <column name="user_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_user_id" references="userEntity(id)"/>
+                <constraints foreignKeyName="fk_user_id" references="users(id)"/>
             </column>
 
-            <column name="colleague_name" type="varchar(32)">
+            <column name="colleague_name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="colleague_start_date" type="DATE">
+            <column name="position_id" type="BIGINT">
+                <constraints foreignKeyName="fk_position_id" references="positions(id)"/>
+            </column>
+
+            <column name="department_id" type="BIGINT">
+                <constraints foreignKeyName="fk_department_id" references="departments(id)"/>
+            </column>
+
+            <column name="probationary_period_from" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="days_before_interview" type="INT" defaultValue="0">
-                <constraints nullable="true"/>
-            </column>
-
-            <column name="interview_date" type="DATE">
+            <column name="probationary_period_to" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
 
@@ -93,20 +150,131 @@
         </createTable>
 
         <rollback>
-            <dropTable  tableName="interview_info"/>
+            <dropTable tableName="collegues_info"/>
         </rollback>
 
     </changeSet>
 
-    <!--<changeSet id="7" author="Kirill">-->
-        <!--<sql>-->
-            <!--ALTER TABLE interview_info ADD CONSTRAINT UNIQUE (product_name, producer)-->
-        <!--</sql>-->
-    <!--</changeSet>-->
+    <!--Таблица списка контрольных точек-->
+    <changeSet id="6" author="Kirill">
+        <createTable tableName="control_points">
+            <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
 
-    <changeSet id="4" author="Kirill">
+            <column name="time_def" type="varchar(7)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="def" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="days_before_interview" type="INT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="navi_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="control_points"/>
+        </rollback>
+
+    </changeSet>
+
+    <!--Таблица статусов контрольных точек-->
+    <changeSet id="7" author="Kirill">
+        <createTable tableName="control_point_statuses">
+            <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="def" type="VARCHAR(20)">
+                <constraints unique="true"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="control_point_statuses"/>
+        </rollback>
+    </changeSet>
+
+    <!--Таблица записей контрольных точек-->
+    <changeSet id="8" author="Kirill">
+        <createTable tableName="control_point_histories">
+            <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="control_point_id" type="BIGINT">
+                <constraints foreignKeyName="fk_control_point_id" references="control_points(id)"/>
+            </column>
+
+            <column name="collegue_info_id" type="BIGINT">
+                <constraints foreignKeyName="fk_collegue_id" references="collegues_info(id)"/>
+            </column>
+
+            <column name="control_point_status_id" type="BIGINT">
+                <constraints foreignKeyName="fk_control_point_status_id" references="control_point_statuses(id)"/>
+            </column>
+
+            <column name="comment" type="VARCHAR(200)"/>
+
+            <column name="update_date" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="navi_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="collegues_info"/>
+        </rollback>
+
+    </changeSet>
+
+    <!--Заполнение таблицы roles знаечниями по умолчанию-->
+    <changeSet id="9" author="Kirill">
         <sql>
-            insert into roles (name) values("ROLE_USER"),("ADMIN_ROLE");
+            insert into roles (name) values("ROLE_USER"),("ROLE_ADMIN");
+        </sql>
+    </changeSet>
+
+    <!--Создание пользователя АДМИНА с админской ролью-->
+    <changeSet id="10" author="Kirill">
+        <sql>
+            insert into users (user_name, user_login, user_password, user_role_id) values("admin", "admin",
+            "$2a$10$NjUt/SCXtPKoIGQEJf/Ib.rSDfi6QcogbA1cR2qT7VMUdOAwlqfQu", 2);
+        </sql>
+    </changeSet>
+
+    <!--Заполнение таблицы control_point_statuses знаечниями по умолчанию-->
+    <changeSet id="11" author="Kirill">
+        <sql>
+            insert into control_point_statuses (def) values ("PASSED"), ("FAILED"), ("");
+        </sql>
+    </changeSet>
+
+    <!--Заполнение таблицы control_points знаечниями по умолчанию-->
+    <changeSet id="12" author="Kirill">
+        <sql>
+            insert into control_points (time_def, def, days_before_interview) values
+            ("1д", "Один день", 1),
+            ("1н", "Одна неделя", 7),
+            ("2н", "Две недели", 14),
+            ("1м", "Один месяц", 30),
+            ("1.5м", "Полтора месяца", 45),
+            ("2м", "Два месяца", 60),
+            ("2.5м", "Два с половиной месяца", 75),
+            ("3м", "Три месяца (финалочка)", 90);
         </sql>
     </changeSet>
 
