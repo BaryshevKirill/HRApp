@@ -244,22 +244,22 @@
     <!--Заполнение таблицы roles знаечниями по умолчанию-->
     <changeSet id="9" author="Kirill">
         <sql>
-            insert into roles (name) values("ROLE_USER"),("ROLE_ADMIN");
+            insert into roles (name) values('ROLE_USER'),('ROLE_ADMIN');
         </sql>
     </changeSet>
 
     <!--Создание пользователя АДМИНА с админской ролью-->
     <changeSet id="10" author="Kirill">
         <sql>
-            insert into users (user_name, user_login, user_password, user_role_id) values("admin", "admin",
-            "$2a$10$NjUt/SCXtPKoIGQEJf/Ib.rSDfi6QcogbA1cR2qT7VMUdOAwlqfQu", 2);
+            insert into users (user_name, user_login, user_password, user_role_id) values('admin', 'admin',
+            '$2a$10$NjUt/SCXtPKoIGQEJf/Ib.rSDfi6QcogbA1cR2qT7VMUdOAwlqfQu', 2);
         </sql>
     </changeSet>
 
     <!--Заполнение таблицы control_point_statuses знаечниями по умолчанию-->
     <changeSet id="11" author="Kirill">
         <sql>
-            insert into control_point_statuses (def) values ("PASSED"), ("FAILED"), ("");
+            insert into control_point_statuses (def) values ('PASSED'), ('FAILED'), ('');
         </sql>
     </changeSet>
 
@@ -267,14 +267,14 @@
     <changeSet id="12" author="Kirill">
         <sql>
             insert into control_points (time_def, def, days_before_interview) values
-            ("1д", "Один день", 1),
-            ("1н", "Одна неделя", 7),
-            ("2н", "Две недели", 14),
-            ("1м", "Один месяц", 30),
-            ("1.5м", "Полтора месяца", 45),
-            ("2м", "Два месяца", 60),
-            ("2.5м", "Два с половиной месяца", 75),
-            ("3м", "Три месяца (финалочка)", 90);
+            ('1д', 'Один день', 1),
+            ('1н', 'Одна неделя', 7),
+            ('2н', 'Две недели', 14),
+            ('1м', 'Один месяц', 30),
+            ('1.5м', 'Полтора месяца', 45),
+            ('2м', 'Два месяца', 60),
+            ('2.5м', 'Два с половиной месяца', 75),
+            ('3м', 'Три месяца (финалочка)', 90);
         </sql>
     </changeSet>
 

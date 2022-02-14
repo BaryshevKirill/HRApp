@@ -30,7 +30,7 @@ public class ControlPointsHistoriesEntity implements Serializable {
     private ControlPointsEntity controllPointId;
 
     @OneToOne
-    @JoinColumn(name = "collegues_info_id")
+    @JoinColumn(name = "collegue_info_id")
     private ColleguesInfoEntity colleguesInfoId;
 
     @OneToOne

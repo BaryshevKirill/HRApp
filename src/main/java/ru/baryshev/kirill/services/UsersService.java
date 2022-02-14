@@ -1,6 +1,7 @@
 package ru.baryshev.kirill.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +19,10 @@ public class UsersService {
     @Autowired
     UserRepository userRepository;
 
+//    TODO наверно лучше этоубрать хачем тут роль сделать енум
     @Autowired
     private RoleRepository roleRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -27,6 +30,7 @@ public class UsersService {
 //        usersEntity.setUserRole(roleRepository.findByName("ROLE_USER").getId());
         usersEntity.setRoleEntity(roleRepository.findByName("ROLE_USER"));
         usersEntity.setUserPassword(passwordEncoder.encode(usersEntity.getUserPassword()));
+        usersEntity.setUserPassword(usersEntity.getUserPassword());
         usersEntity = userRepository.save(usersEntity);
         return UsersDto.CONVERTER.from(usersEntity);
     }

@@ -1,6 +1,5 @@
 package ru.baryshev.kirill.security;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -8,19 +7,38 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Base64;
 import java.util.Date;
 
 @Component
 @Log
 public class JwtProvider {
 
-    @Value("$(jwt.secret)")
+    @Value("${jwt.secret}")
     private String jwtSecret;
+
+    private final UserDetailsService userDetailsService;
+
+    public JwtProvider(@Qualifier("customUserDetailsService") UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+
+    @PostConstruct
+    protected void init() {
+        jwtSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
+    }
 
     public String generateToken(String login) {
         Date date = Date.from(LocalDateTime.now().plusHours(8).atZone(ZoneId.systemDefault()).toInstant());
@@ -49,8 +67,12 @@ public class JwtProvider {
         return false;
     }
 
+    public Authentication getAuthentication(String token) {
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getLoginFromToken(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
     public String getLoginFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        return claims.getSubject();
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 }

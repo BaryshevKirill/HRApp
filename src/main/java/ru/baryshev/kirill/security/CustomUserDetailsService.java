@@ -4,14 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.baryshev.kirill.entities.UserEntity;
 import ru.baryshev.kirill.services.UsersService;
 
-@Component
+//@Component
+@Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
+    private final UsersService usersService;
+
     @Autowired
-    private UsersService usersService;
+    CustomUserDetailsService(UsersService usersService) {
+        this.usersService = usersService;
+    }
 
     @Override
     public CustomUserDetails loadUserByUsername(String userLogin) throws UsernameNotFoundException {

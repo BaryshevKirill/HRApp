@@ -1,6 +1,5 @@
 package ru.baryshev.kirill.controllers;
 
-import com.auth0.client.mgmt.UsersEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +35,4 @@ public class UserController {
     public UsersDto findUserById(@PathVariable(value = "id") Long userId) {
         return usersService.findById(userId);
     }
-
-
 }

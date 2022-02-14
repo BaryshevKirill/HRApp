@@ -90,11 +90,20 @@
         </dependency>
 
         <!-- Database connector Mysql -->
+<!--        <dependency>-->
+<!--            <groupId>mysql</groupId>-->
+<!--            <artifactId>mysql-connector-java</artifactId>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
+
+        <!-- Database connector Postgres -->
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.2</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>
