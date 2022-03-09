@@ -1,0 +1,66 @@
+.points {
+  /*width: 75px;*/
+  display: inline-block;
+  margin: 1px;
+  border: 1px groove #51d219;
+  text-align: center;
+  cursor: pointer;
+  max-width: 75px;
+  min-width: 35px;
+}
+
+.center-in-cell {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.myclass {
+  color: rgb(133, 144, 163);
+  color: #fa0202;
+  color: #E3E5E8;
+  background-color: #262B36;
+  color: #5AB1F1;
+}
+
+.back-ground-black {
+  background-color: rgb(18, 20, 26);
+}
+
+body {
+  background-color: #0D0E12;
+  color: #B4BAC5;
+  margin: 0;
+  min-width: 560px;
+}
+
+.high-line {
+  color: #E3E5E8;
+  background-color: #262B36;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.table-position {
+  margin: 25px;
+}
+
+/*textarea { resize: none; }*/
+
+.textarea-modal-size {
+  /*max-width: 700px;*/
+  /*min-width: 150px;*/
+  width: 563px;
+  height: 124px;
+  margin: 15px;
+  /*-webkit-box-sizing: border-box;*/
+}
+
+.mybtn {
+  display: inline-flex;
+  border-radius: 3px;
+  min-width: 52px;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-right: 25px;
+  margin-left: 25px;
+  /*position: absolute;*/
+}

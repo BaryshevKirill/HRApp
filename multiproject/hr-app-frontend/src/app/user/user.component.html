@@ -1,0 +1,42 @@
+<div>
+  <div class="p-3 mb-2 bg-dark text-white">
+    <button>asdadasdd</button>
+    <!--    <table class="p-3 mb-2 bg-dark text-white">-->
+    <table class="table text-white-50">
+      <thead>
+      <tr>
+        <th scope="col">ФИО</th>
+        <th scope="col">Должность</th>
+        <th scope="col">Отдел</th>
+        <th scope="col">Дата ИС</th>
+        <th scope="col">Контрольные точки</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <!--      <tr *ngFor="let person of persons">-->
+      <!--        <td>{{person.name}}</td>-->
+      <!--        <td>{{person.hobby}}</td>-->
+      <!--        <td>RAD</td>-->
+      <!--        <td>RAD</td>-->
+      <!--        <td>RAD</td>-->
+      <!--      </tr>      -->
+      <tr *ngFor="let user of users">
+        <td>{{user.userId}}</td>
+        <td>{{user.userLogin}}</td>
+        <td>{{user.userName}}</td>
+        <td>RAD</td>
+        <td>RAD</td>
+      </tr>
+
+<!--      <tr>-->
+<!--        <td>2asd</td>-->
+<!--        <td>фыв</td>-->
+<!--        <td>фыв</td>-->
+<!--        <td>фыв</td>-->
+<!--        <td>фыв</td>-->
+<!--      </tr>-->
+      </tbody>
+    </table>
+  </div>
+</div>

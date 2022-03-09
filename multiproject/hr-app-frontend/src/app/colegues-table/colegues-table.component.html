@@ -1,0 +1,84 @@
+<!--<body class="p-3 mb-2 bg-dark text-white min-vh-100">-->
+<body class="min-vh-100" style="flex: none">
+
+<div id="root">
+  <header class="high-line">
+    <div>
+      Ты это заходи если че
+    </div>
+  </header>
+
+<!--  <button (click)="getColorByStatus()">asd</button>-->
+
+  <div id="tableContainer" class="border-white border-5 table-position back-ground-black" style="margin-top: 24px">
+    <table class="table text-white-50">
+      <thead>
+      <tr class="center-in-cell table-bordered ">
+        <th scope="col">ФИО</th>
+        <th scope="col">Должность</th>
+        <th scope="col">Отдел</th>
+        <th scope="col">Дата ИС</th>
+        <th scope="col">Контрольные точки</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr class="center-in-cell" *ngFor="let colegue of colegues">
+        <td>{{colegue.colleagueName}}</td>
+        <td>{{colegue.positionId.def}}</td>
+        <td>{{colegue.departmentId.def}}</td>
+        <td>{{colegue.probationaryPeriodFrom}}-{{colegue.probationaryPeriodTo}}</td>
+        <td width="content">
+          <div class="points" id *ngFor="let point of controlPointsDef"
+                         (click)="openModal('point-card-modal',colegue.id,point.id)" [ngStyle]="{'border': getColorByStatus(colegue.id,point.id)}">
+            {{point.time_def}}
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <jw-modal id="point-card-modal">
+    <h1>напиши уже ченить про пердуна</h1>
+    <hr>
+    <p>Комментарий:</p>
+    <div>
+      <textarea class="textarea-modal-size" name="comments" type="text"
+                [(ngModel)]="choosenControlPoint.comment"></textarea>
+    </div>
+    <!--    <p>Инфо дней до интервью : {{choosenControlPoint.controlPointInfo.daysBeforeInterview}}</p>-->
+    <p>Статус : {{choosenControlPoint.status}}</p>
+
+    <div>
+      <!--      <input type="radio" id="success"-->
+      <!--             name="dicision" value="success" checked>-->
+      <!--      <label for="success">Успешно</label>-->
+      <!---->
+      <!--      <input type="radio" id="failed"-->
+      <!--             name="dicision" value="failed">-->
+      <!--      <label for="failed">Дурачок</label>-->
+
+      <input id="success" name="options" type="radio" [value]="controlPointStatusesEnum.PASSED" [(ngModel)]="radioBtn">
+<!--      <input id="success" name="options" ng-control="options" type="radio" [value]="controlPointStatusesEnum.PASSED" [(ngModel)]="radioBtn">-->
+      <label style="margin-left: 10px" for="success">Успешно</label>
+      <br/>
+
+      <input id="failed" name="options" type="radio" [value]="controlPointStatusesEnum.FAILED" [(ngModel)]="radioBtn">
+<!--      <input id="failed" name="options" ng-control="options" type="radio" [value]="controlPointStatusesEnum.FAILED" [(ngModel)]="radioBtn">-->
+      <label style="margin-left: 10px" for="failed">Дурачок</label>
+      <br/>
+    </div>
+    <p>
+      {{coleguesControlPoint.}}
+    </p>
+    <hr>
+    <div style="position:relative; width: inherit">
+      <button class="btn-danger mybtn" (click)="closeModal('point-card-modal');">Отмена</button>
+      <button style="margin-left: 360px" class="btn-success mybtn" (click)="saveModal('point-card-modal');">Сохранить
+      </button>
+    </div>
+  </jw-modal>
+
+</div>
+</body>
