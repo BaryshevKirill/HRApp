@@ -4,18 +4,23 @@ import {ColeguesTable} from "../models/colegue-table/colegues-table";
 import {ColeguesControlPoints, ControlPoints} from "../models/controlPoints/colegues-control-points";
 import {combineLatest} from "rxjs";
 import {PointsDef} from "../models/colegue-table/points-info";
-import {ControlPointCardComponent} from "../control-point-card/control-point-card.component";
-// import { DialogService } from './dialog/dialog.service';
-import {OverlayModule} from '@angular/cdk/overlay';
-import {ModalService} from "../modal/modal.service";
 import {ControlPointStatuses} from "../enums/control-point-statuses";
+import {MatDialog} from "@angular/material/dialog";
+import {PointInfoModalComponent} from "../modals/point-info-modal/point-info-modal.component";
+import {authInterceptorProviders} from "../_hekpers/auth.interceptor";
+import {User} from "../models/user";
+import {AppService} from "../app.service";
+import {StatusProbationModalComponent} from "../modals/status-probation-modal/status-probation-modal.component";
 
 
 @Component({
   selector: 'app-colegues-table',
   templateUrl: './colegues-table.component.html',
   styleUrls: ['./colegues-table.component.css'],
-  providers: [ColeguesTableService],
+  providers: [
+    ColeguesTableService,
+    authInterceptorProviders
+  ],
 })
 export class ColeguesTableComponent implements OnInit {
 
@@ -29,28 +34,30 @@ export class ColeguesTableComponent implements OnInit {
 
   choosenColeguesControlPoint: ColeguesControlPoints = new ColeguesControlPoints()
 
-  radioBtn: any
-
-  coleguesTableService: ColeguesTableService
-
   controlPointStatusesEnum = ControlPointStatuses
 
-  constructor(private modalService: ModalService, coleguesTableService: ColeguesTableService) {
-    // constructor(coleguesTableService: ColeguesTableService) {
-    this.coleguesTableService = coleguesTableService
+  user: User = new User()
+
+
+  constructor(private coleguesTableService: ColeguesTableService, public dialog: MatDialog, private appService: AppService) {
   }
 
   ngOnInit() {
-    console.log("INIT")
 
-    //TODO тут разобраться как это рабоатет и как убрать депрекейтет
-    combineLatest(this.coleguesTableService.getColegues())
+    this.appService.currentUser.subscribe(user => this.user = user)
+
+    console.log("INIT colegue-table")
+
+    // TODO тут разобраться как это рабоатет и как убрать депрекейтет
+    combineLatest(this.coleguesTableService.getColegues(this.user.userId))
       .subscribe(([colegues]) => {
         this.colegues = colegues;
+        if(colegues == null) {
+          return;
+        }
         let coleguesIds = colegues.map(item => {
           return item.id
         })
-        console.log("ids:" + coleguesIds)
 
         for (const colegueIdKey in coleguesIds) {
           this.coleguesTableService.getControlPointsByColegue(coleguesIds[colegueIdKey].toString()).subscribe(data => {
@@ -67,6 +74,8 @@ export class ColeguesTableComponent implements OnInit {
           this.controlPointsDef = data
         })
     }
+
+
   }
 
   getColorByStatus(colegueId: bigint, pointId: bigint): any {
@@ -74,6 +83,13 @@ export class ColeguesTableComponent implements OnInit {
     let value = this.coleguesControlPoint.find((it) =>
       colegueId === it.colegueId
     ) as ColeguesControlPoints;
+
+    //TODO надо разобраться почему ошибки undefined
+    if (value == undefined) {
+      console.warn("Value is undefined in getColorByStatus. Exit from getColorByStatus")
+      return;
+    }
+
     let controlPoints = value.controlPoints.find(it => pointId == it.controlPointInfo.id) as ControlPoints;
 
     if (controlPoints == null) {
@@ -93,38 +109,65 @@ export class ColeguesTableComponent implements OnInit {
     }
   }
 
-  openModal(id: string, colegueId: bigint, pointId: bigint) {
-    // console.log("коллега айди:", colegueId)
-    // console.log("before start opening", this.coleguesControlPoint)
+  openPointDialog(colegueId: bigint, pointId: bigint) {
 
-    let value = this.coleguesControlPoint.find((it) =>
+    this.choosenColeguesControlPoint = this.coleguesControlPoint.find((it) =>
       colegueId === it.colegueId
     ) as ColeguesControlPoints;
 
-    // console.log("after filter by colegueId", this.coleguesControlPoint)
-    // console.log("Валуе после фильтров:", value)
-
-    this.choosenColeguesControlPoint = value;
-    this.choosenControlPoint = value.controlPoints.find(it => pointId == it.controlPointInfo.id) as ControlPoints;
+    this.choosenControlPoint = this.choosenColeguesControlPoint.controlPoints.find(it => pointId == it.controlPointInfo.id) as ControlPoints;
     if (this.choosenControlPoint == null) {
       this.choosenControlPoint = new ControlPoints();
       this.choosenControlPoint.controlPointInfo.id = pointId;
+      this.choosenColeguesControlPoint.controlPoints[this.choosenColeguesControlPoint.controlPoints.length] = this.choosenControlPoint;
     }
-    // console.log("choosen: ",this.choosenControlPoint)
 
-    this.choosenColeguesControlPoint.controlPoints[this.choosenColeguesControlPoint.controlPoints.length] = this.choosenControlPoint;
-    this.modalService.open(id);
+    let matDialogRef = this.dialog.open(PointInfoModalComponent, {
+      data: {
+        comment: this.choosenControlPoint.comment,
+        status: this.choosenControlPoint.status,
+        colegueId: this.choosenColeguesControlPoint.colegueId
+      },
+    });
+
+    matDialogRef.afterClosed().subscribe((result) => {
+      console.log("result: ", result)
+      if (result != null) {
+        this.choosenControlPoint.comment = result.comment
+        this.choosenControlPoint.status = result.status
+        this.coleguesTableService.saveComment(this.choosenControlPoint, this.choosenColeguesControlPoint.colegueId, this.user.userId)
+          .subscribe();
+      }
+    })
   }
 
-  closeModal(id: string) {
-    // this.choosenControlPoint = new ControlPoints();
-    this.modalService.close(id);
-  }
+  openProbationStatusDialog(colegueId: bigint) {
+    let colegueInfo = this.colegues.find((it) => {
+      return colegueId == it.id
+    });
 
-  saveModal(id: string) {
-    this.coleguesTableService.saveComment(this.choosenControlPoint, this.choosenColeguesControlPoint.colegueId)
-      .subscribe();
-    console.log("Log save: ", this.choosenControlPoint);
-    this.modalService.close(id);
+    console.log("asdadas", this.colegues)
+    console.log("adasdad", colegueInfo)
+
+    let matDialogRef = this.dialog.open(StatusProbationModalComponent, {
+      data: {
+        status: colegueInfo?.probationStatusId,
+        colegueId: colegueId
+      },
+    });
+
+    matDialogRef.afterClosed().subscribe((result) => {
+      console.log("result probation: ", result)
+      if (result != null) {
+
+        console.log("result after closing", result)
+
+        // colegueInfo.probationStatusId =
+        // this.choosenControlPoint.comment = result.comment
+        // this.choosenControlPoint.status = result.status
+        // this.coleguesTableService.saveComment(this.choosenControlPoint, this.choosenColeguesControlPoint.colegueId)
+        //   .subscribe();
+      }
+    })
   }
 }

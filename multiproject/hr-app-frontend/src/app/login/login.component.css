@@ -1,0 +1,150 @@
+#man-people-user, #lock-locker {
+  /*fill:white;*/
+  fill:rgb(79, 85, 97);
+}
+
+.container {
+  width:300px;
+  margin:12% auto;
+}
+
+form {
+  width: 250px;
+  height: 250px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -125px 0 0 -125px;
+  color: #E3E5E8;
+}
+
+.sign-in {
+  float:left;
+  /*color:white;*/
+  color:rgb(79, 85, 97);
+  font-size:1.3em;
+}
+
+.user {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin-top: 6px;
+  padding: 7px;
+  left: 5px;
+}
+.user::after {
+   content:"";
+   width:1px;
+   height:30px;
+   position:absolute;
+   background:#2e3441;;
+   top:4px;
+   left:100%;
+ }
+
+.lock {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin-top: 6px;
+  padding: 7px;
+  left: 5px;
+}
+.lock::after {
+  content:"";
+  width:1px;
+  height:30px;
+  position:absolute;
+  background:#2e3441;;
+  top:4px;
+  left:100%;
+}
+
+input {
+  width:90%;
+  padding:5px;
+  height:40px;
+  border-radius:3px;
+  margin:5px 0;
+  outline: none;
+  font-size:0.9em;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: inset 0 0 0 50px #0D0E12 !important; /* Цвет фона */
+  -webkit-text-fill-color: white !important; /* цвет текста */
+  color: white !important; /* цвет текста */
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+  border:1px solid white;
+  box-shadow:none;
+}
+
+input[type="text"],
+input[type="password"]{
+  background:transparent;
+  border:2px solid #2e3441;
+  padding-left:45px;
+  color:white;
+}
+
+/*.user-input {*/
+  /*background-color: transparent;*/
+  /*border: 2px solid #2e3441;*/
+  /*border-radius: 2px;*/
+  /*outline: none;*/
+/*}*/
+
+input[type="checkbox"] {
+  width: 50px;
+  height: 20px;
+  border-radius: 30px;
+  margin-top: 10px;
+  float: left;
+  text-align: center;
+  padding: 4px 0;
+  font-size: 0.65em;
+  position: relative;
+}
+
+/*Для чекбокса заполнмить меня*/
+#loginForm p {
+  color: rgb(79, 85, 97);
+  padding: 0 20px;
+  font-weight: 700;
+  font-size: 12px;
+  margin: 5px 0 0 0;
+}
+#loginForm p > a{
+  color: rgb(111, 119, 135);
+  text-decoration: none;
+}
+#loginForm p > a:hover{
+  border-bottom: 1px solid;
+}
+
+.login-enter-btn {
+  width:90%;
+  height:40px;
+  border-radius:3px;
+  margin-top: 5px;
+  /*outline: none;*/
+  /*background: #555d6b;*/
+  background: rgb(79, 85, 97);
+  color:white;
+  font-size:0.9em;
+}
+
+.login-enter-btn:hover {
+  background: rgb(95, 102, 115);
+}
+
+.error-message {
+  margin-left: 7px;
+  /*text-align: center;*/
+  font-size: 0.7em;
+  color: #fb5252;
+  width:90%;
+}

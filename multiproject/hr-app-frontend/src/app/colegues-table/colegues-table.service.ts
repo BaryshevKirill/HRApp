@@ -8,12 +8,14 @@ import {
   SaveControlPointInfo
 } from "../models/controlPoints/colegues-control-points";
 import {PointsDef} from "../models/colegue-table/points-info";
-
+import {ControlPointStatuses} from "../enums/control-point-statuses";
+import {AppComponent} from "../app.component";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ColeguesTableService {
+
 
   private readonly getColeguesUrl: string
   private readonly getControlPointUrl: string
@@ -21,15 +23,15 @@ export class ColeguesTableService {
   private readonly saveControlPointUrl: string
 
   constructor(private httpClient: HttpClient) {
-    this.getColeguesUrl = 'http://localhost:8080/InterviewInfo/findByUserId/2';
+    this.getColeguesUrl = 'http://localhost:8080/InterviewInfo/findByUserId/';
     this.getControlPointUrl = 'http://localhost:8080/ControlPoints/findByColegueId/';
     this.getPointDefUrl = 'http://localhost:8080/ControlPoints/getAllControlPointsDef';
     this.saveControlPointUrl = 'http://localhost:8080/ControlPoints/saveControlPointInfo';
   }
 
-  public getColegues(): Observable<ColeguesTable[]> {
+  public getColegues(userId: string): Observable<ColeguesTable[]> {
     console.log("База дай мне сил")
-    return this.httpClient.get<ColeguesTable[]>(this.getColeguesUrl);
+    return this.httpClient.get<ColeguesTable[]>(this.getColeguesUrl + userId);
   }
 
   public getControlPointsDef(): Observable<PointsDef[]> {
@@ -45,19 +47,28 @@ export class ColeguesTableService {
   }
 
 
-  public saveComment(choosenControlPoint: ControlPoints, colegueId: bigint): Observable<SaveControlPointInfo> {
-  // public saveComment(choosenColegueControlPoint: ColeguesControlPoints): Observable<SaveControlPointInfo> {
+  public saveComment(choosenControlPoint: ControlPoints, colegueId: bigint, userId: string): Observable<SaveControlPointInfo> {
     let saveControlPoint = new SaveControlPointInfo();
 
     saveControlPoint.comment = choosenControlPoint.comment;
     saveControlPoint.controlPointId = choosenControlPoint.controlPointInfo.id;
     saveControlPoint.colegueId = colegueId;
-    //  TODO пока хардкод
-    saveControlPoint.userId = 2;
-    // saveControlPoint.status = choosenControlPoint.status;
-    saveControlPoint.status = "PASSED";
+    saveControlPoint.userId = +userId;
+    saveControlPoint.status = choosenControlPoint.status
     console.log(saveControlPoint)
-    return this.httpClient.post<SaveControlPointInfo>(this.saveControlPointUrl,saveControlPoint);
+    return this.httpClient.post<SaveControlPointInfo>(this.saveControlPointUrl, saveControlPoint);
+  }
 
+  public saveProbationStatus(): Observable<SaveControlPointInfo> {
+    let saveControlPoint = new SaveControlPointInfo();
+
+    // saveControlPoint.comment = choosenControlPoint.comment;
+    // saveControlPoint.controlPointId = choosenControlPoint.controlPointInfo.id;
+    // saveControlPoint.colegueId = colegueId;
+    // saveControlPoint.userId = 2;
+    // // saveControlPoint.status = ControlPointStatuses[radioBtn]
+    // saveControlPoint.status = choosenControlPoint.status
+    // console.log(saveControlPoint)
+    return this.httpClient.post<SaveControlPointInfo>(this.saveControlPointUrl, saveControlPoint);
   }
 }
