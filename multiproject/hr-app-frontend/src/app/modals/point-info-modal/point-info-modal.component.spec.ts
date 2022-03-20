@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModalComponent } from './modal.component';
+import { PointInfoModalComponent } from './point-info-modal.component';
 
-describe('ModalComponent', () => {
-  let component: ModalComponent;
-  let fixture: ComponentFixture<ModalComponent>;
+describe('PointInfoModalComponent', () => {
+  let component: PointInfoModalComponent;
+  let fixture: ComponentFixture<PointInfoModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ModalComponent ]
+      declarations: [ PointInfoModalComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ModalComponent);
+    fixture = TestBed.createComponent(PointInfoModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
