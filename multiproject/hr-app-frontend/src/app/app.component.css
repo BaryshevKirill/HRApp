@@ -11,3 +11,50 @@ h1{
 .back-ground-black {
   background-color: rgb(18, 20, 26);
 }
+
+.toolbar h1 {
+  padding-left: 5px;
+}
+
+.dialog-container-custom .mat-dialog-container {
+  padding: 0;
+  background: grey;
+}
+
+body {
+  background-color: #0D0E12;
+  color: #B4BAC5;
+  margin: 0;
+  min-width: 560px;
+}
+
+.login {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  white-space: nowrap;
+  margin-right: 5px;
+  display: inline-block;
+}
+
+.pointer {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.img-color-white {
+  filter: invert(1);;
+}
+
+.high-line {
+  color: #E3E5E8;
+  background-color: #262B36;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.12);
+  height: 56px;
+  position: relative;
+  align-items: center;
+  display: flex;
+  padding-right: 25px;
+  padding-left: 25px;
+  justify-content: space-between;
+}
