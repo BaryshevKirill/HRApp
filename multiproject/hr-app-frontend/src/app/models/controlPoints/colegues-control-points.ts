@@ -6,17 +6,11 @@ export class ColeguesControlPoints {
 
   controlPoints : ControlPoints[]
 
-  // constructor(colegueId : bigint, controlPoints : ControlPoints[]){
-  //   this.colegueId = colegueId;
-  //   this.controlPoints = controlPoints
-  // }
-
   public coleguesControlPoints(colegueId : bigint, controlPoints : ControlPoints[]) : any {
     this.colegueId = colegueId;
     this.controlPoints = controlPoints
     return this;
   }
-
 }
 
 export class ControlPoints {

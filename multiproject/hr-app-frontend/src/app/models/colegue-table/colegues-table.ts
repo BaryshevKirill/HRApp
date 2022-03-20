@@ -10,6 +10,8 @@ export class ColeguesTable {
 
   probationaryPeriodFrom : Date
   probationaryPeriodTo : Date
+
+  probationStatusId : ProbationStatusId
   // points : PointsInfo
 }
 
@@ -27,6 +29,12 @@ export class UserId {
   userId : number
   userName : string
   userLogin : string;
+}
+
+export class ProbationStatusId {
+  id : number
+  name : string
+  def : string
 }
 
 
