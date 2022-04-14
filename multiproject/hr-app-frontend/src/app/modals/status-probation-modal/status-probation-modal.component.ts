@@ -2,10 +2,16 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {DialogDataBase, Modal} from "../modal";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ProbationStatusId} from "../../models/colegue-table/colegues-table";
+import {ProbationStatuses} from "../../enums/probation-statuses";
 
 export interface StatusProbationDialogData extends DialogDataBase{
   colegueId: bigint
   status: ProbationStatusId
+}
+
+interface RusStatus {
+  id: number;
+  rusDef: string;
 }
 
 @Component({
@@ -14,6 +20,10 @@ export interface StatusProbationDialogData extends DialogDataBase{
   styleUrls: ['./status-probation-modal.component.css']
 })
 export class StatusProbationModalComponent extends Modal<StatusProbationDialogData> implements OnInit {
+
+
+  rusStatus : RusStatus[] = [
+  ]
 
   constructor(@Inject(MAT_DIALOG_DATA) data: StatusProbationDialogData,
               dialogRef: MatDialogRef<StatusProbationModalComponent>) {
@@ -28,7 +38,12 @@ export class StatusProbationModalComponent extends Modal<StatusProbationDialogDa
     return true;
   }
 
-  getDefStatus() : string {
-    return this.data.status.def
+  getRusStatus(id : number) : string {
+    switch (id) {
+      case this.probationStatusesEnum.FAILED : return "Не пройден"
+      case this.probationStatusesEnum.PASSED : return "Пройден"
+      case this.probationStatusesEnum.IN_PROGRESS : return "В процессе"
+      default : return "Не известный статус"
+    }
   }
 }

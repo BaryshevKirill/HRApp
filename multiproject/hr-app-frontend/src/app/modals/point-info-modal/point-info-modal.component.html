@@ -7,14 +7,17 @@
     <div>
       <textarea class="textarea-modal-size text-white-50" name="comments" type="text"
                 [(ngModel)]="data.comment" #comment="ngModel" required
-      ></textarea>
+                [disabled]="probationStatusesEnum.IN_PROGRESS != data.probationStatus"></textarea>
       <div class="alert alert-danger" *ngIf="comment.invalid && (comment.dirty || comment.touched) && isClickedSave">
         <div *ngIf="comment.errors?.['required']">Comment is required</div>
       </div>
     </div>
-    <p>Статус : {{data.status}}</p>
-    <div>
+    <div [style.display]="probationStatusesEnum.IN_PROGRESS != data.probationStatus ? 'flex' : 'none'">
+      <p>Текущий статус : {{data.status}}</p>
+    </div>
+    <div [style.display]="probationStatusesEnum.IN_PROGRESS == data.probationStatus ? 'flex' : 'none'">
       <mat-radio-group [(ngModel)]="data.status" required name="radio">
+        <!--      <mat-radio-group [(ngModel)]="data.status" required name="radio" disabled>-->
         <mat-radio-button class="radio-btn" value="PASSED">
           Крутой
         </mat-radio-button>
@@ -23,11 +26,11 @@
           Дурачок
         </mat-radio-button>
       </mat-radio-group>
-        <div class="alert alert-danger" *ngIf="isClickedSave && data.status == 'UNDEFINED'">Алло выбери статус</div>
+      <div class="alert alert-danger" *ngIf="isClickedSave && data.status == 'UNDEFINED'">Алло выбери статус</div>
       <br/>
     </div>
     <hr>
-    <div style="position:relative; width: inherit">
+    <div style="position:relative; width: inherit" *ngIf="probationStatusesEnum.IN_PROGRESS == data.probationStatus">
       <button class="my-btn-danger" mat-button [mat-dialog-close]="undefined">Отмена</button>
       <button class="btn-success" mat-button type="submit">Сохранить</button>
     </div>

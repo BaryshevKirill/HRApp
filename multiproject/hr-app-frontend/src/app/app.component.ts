@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {TokenStorageService} from "./_services/token-storage.service";
 import {Router} from "@angular/router";
 import {User} from "./models/user";
 import {AppService} from "./app.service";
+import {AuthService} from "./_services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -19,25 +19,38 @@ export class AppComponent {
 
   user : User;
 
-  constructor(private tokenStorageService: TokenStorageService, router: Router, private appService : AppService) {
+  // constructor(private tokenStorageService: TokenStorageService, router: Router, private appService : AppService) {
+  //   this.user = new User()
+  //     if (tokenStorageService.getToken()) {
+  //       router.navigate(['coleguesTable']);
+  //     } else {
+  //       router.navigate(['login']);
+  //     }
+  // }
+
+  constructor(private authService: AuthService,
+              private router: Router,
+              private appService : AppService) {
     this.user = new User()
-      if (tokenStorageService.getToken()) {
-        router.navigate(['coleguesTable']);
-      } else {
-        router.navigate(['login']);
-      }
+    // if (authService.getToken()) {
+    //   router.navigate(['coleguesTable']);
+    // } else {
+    //   router.navigate(['login']);
+    // }
   }
 
   ngOnInit(): void {
 
     this.appService.currentUser.subscribe(user => this.user = user);
+    this.appService.isLoggedIn.subscribe(it => this.isLoggedIn = it)
 
     console.log("INIT app.component")
 
-    this.isLoggedIn = !!this.tokenStorageService.getToken();
-    console.log("LOgged?", this.isLoggedIn)
+    this.isLoggedIn = !!this.authService.getToken();
     if (this.isLoggedIn) {
-      const userFromStorage = this.tokenStorageService.getUser();
+
+
+      const userFromStorage = this.authService.getUser();
       console.log("from token storage", userFromStorage)
       let user = new User()
       user.setAll(userFromStorage.userId, userFromStorage.userName, userFromStorage.userRole.name);
@@ -47,8 +60,10 @@ export class AppComponent {
   }
 
   logout(): void {
-    this.tokenStorageService.signOut();
-    window.location.reload();
+    this.authService.logout()
+    this.isLoggedIn = false
+    this.router.navigate(['/login'])
+    // window.location.reload();
   }
 }
 

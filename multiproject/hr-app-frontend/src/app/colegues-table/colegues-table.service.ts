@@ -10,6 +10,7 @@ import {
 import {PointsDef} from "../models/colegue-table/points-info";
 import {ControlPointStatuses} from "../enums/control-point-statuses";
 import {AppComponent} from "../app.component";
+import {User} from "../models/user";
 
 @Injectable({
   providedIn: 'root'
@@ -21,17 +22,23 @@ export class ColeguesTableService {
   private readonly getControlPointUrl: string
   private readonly getPointDefUrl: string
   private readonly saveControlPointUrl: string
+  private readonly getAllUsersUrl: string
 
   constructor(private httpClient: HttpClient) {
-    this.getColeguesUrl = 'http://localhost:8080/InterviewInfo/findByUserId/';
-    this.getControlPointUrl = 'http://localhost:8080/ControlPoints/findByColegueId/';
-    this.getPointDefUrl = 'http://localhost:8080/ControlPoints/getAllControlPointsDef';
-    this.saveControlPointUrl = 'http://localhost:8080/ControlPoints/saveControlPointInfo';
+    this.getColeguesUrl = '/api/InterviewInfo/findByUserId/';
+    this.getControlPointUrl = '/api/ControlPoints/findByColegueId/';
+    this.getPointDefUrl = '/api/ControlPoints/getAllControlPointsDef';
+    this.saveControlPointUrl = '/api/ControlPoints/saveControlPointInfo';
+    this.getAllUsersUrl = '/api/users/findAllUsers';
   }
 
-  public getColegues(userId: string): Observable<ColeguesTable[]> {
+  public getColegues(userId: string, selectedStates : string): Observable<ColeguesTable[]> {
     console.log("База дай мне сил")
-    return this.httpClient.get<ColeguesTable[]>(this.getColeguesUrl + userId);
+    console.log(selectedStates)
+    let queryParams = new HttpParams();
+    // queryParams = queryParams.append("page",1);
+    queryParams = queryParams.append("selectedStates", selectedStates)
+    return this.httpClient.get<ColeguesTable[]>(this.getColeguesUrl + userId,{params : queryParams});
   }
 
   public getControlPointsDef(): Observable<PointsDef[]> {
@@ -70,5 +77,9 @@ export class ColeguesTableService {
     // saveControlPoint.status = choosenControlPoint.status
     // console.log(saveControlPoint)
     return this.httpClient.post<SaveControlPointInfo>(this.saveControlPointUrl, saveControlPoint);
+  }
+
+  public getAllUsers() : Observable<User[]>{
+    return this.httpClient.get<User[]>(this.getAllUsersUrl)
   }
 }

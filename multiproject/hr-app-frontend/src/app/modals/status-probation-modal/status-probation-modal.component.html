@@ -2,51 +2,25 @@
 <div>
   <div mat-dialog-title>Редактирование статуса ИС</div>
   <hr>
-  <p>Текущий статус: {{data.status.def}}</p>
+<!--  <p>Текущий статус: {{data.status.def}}</p>-->
   <form #myForm="ngForm" (ngSubmit)="saveModal()">
     <div>
-<!--      <mat-select>-->
-        <mat-form-field appearance="fill" >
-          <mat-label >Choose an option</mat-label>
-          <mat-select>
-            <mat-option value="option1">Option 1</mat-option>
-            <mat-option value="option2">Option 2 (disabled)</mat-option>
-            <mat-option value="option3">Option 3</mat-option>
-          </mat-select>
-        </mat-form-field>
-
+      <mat-form-field appearance="fill">
+<!--        <mat-label>Choose an option</mat-label>-->
+        <mat-select value="{{data.status.id}}">
+          <mat-option
+            value="{{probationStatusesEnum.PASSED}}">{{getRusStatus(probationStatusesEnum.PASSED)}}</mat-option>
+          <mat-option
+            value="{{probationStatusesEnum.IN_PROGRESS}}">{{getRusStatus(probationStatusesEnum.IN_PROGRESS)}}</mat-option>
+          <mat-option
+            value="{{probationStatusesEnum.FAILED}}">{{getRusStatus(probationStatusesEnum.FAILED)}}</mat-option>
+        </mat-select>
+      </mat-form-field>
       <hr>
       <div style="position:relative; width: inherit">
         <button class="btn-success" mat-button type="submit">Подтвердить</button>
       </div>
-<!--      </mat-select>-->
     </div>
-    <!--    <div>-->
-    <!--      <textarea class="textarea-modal-size text-white-50" name="comments" type="text"-->
-    <!--                [(ngModel)]="data.comment" #comment="ngModel" required></textarea>-->
-    <!--      <div class="alert alert-danger" *ngIf="comment.invalid && (comment.dirty || comment.touched) && isClickedSave">-->
-    <!--        <div *ngIf="comment.errors?.['required']">Comment is required</div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--    <p>Статус : {{data.status}}</p>-->
-    <!--    <div>-->
-    <!--      <mat-radio-group [(ngModel)]="data.status" required name="radio">-->
-    <!--        <mat-radio-button class="radio-btn" value="PASSED">-->
-    <!--          Крутой-->
-    <!--        </mat-radio-button>-->
-    <!--        <br/>-->
-    <!--        <mat-radio-button class="radio-btn" value="FAILED">-->
-    <!--          Дурачок-->
-    <!--        </mat-radio-button>-->
-    <!--      </mat-radio-group>-->
-    <!--      <div class="alert alert-danger" *ngIf="isClickedSave && data.status == 'UNDEFINED'">Алло выбери статус</div>-->
-    <!--      <br/>-->
-    <!--    </div>-->
-    <!--    <hr>-->
-    <!--    <div style="position:relative; width: inherit">-->
-    <!--      <button class="my-btn-danger" mat-button [mat-dialog-close]="undefined">Отмена</button>-->
-    <!--      <button class="btn-success" mat-button type="submit">Сохранить</button>-->
-    <!--    </div>-->
   </form>
 </div>
 </body>

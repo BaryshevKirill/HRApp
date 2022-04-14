@@ -5,9 +5,10 @@ import {DialogDataBase, Modal} from "../modal";
 
 export interface PointInfoDialogData extends DialogDataBase{
   colegueId: bigint
-  userId: bigint
+  // userId: bigint
   comment: string
   status: String
+  probationStatus : number
 }
 
 @Component({

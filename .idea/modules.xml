@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/HRApp.iml" filepath="$PROJECT_DIR$/.idea/HRApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/multiproject/HRApp/ru.baryshev.kirill.iml" filepath="$PROJECT_DIR$/multiproject/HRApp/ru.baryshev.kirill.iml" />
     </modules>
   </component>
 </project>

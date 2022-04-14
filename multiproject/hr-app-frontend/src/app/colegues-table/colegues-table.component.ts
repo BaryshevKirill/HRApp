@@ -11,6 +11,7 @@ import {authInterceptorProviders} from "../_hekpers/auth.interceptor";
 import {User} from "../models/user";
 import {AppService} from "../app.service";
 import {StatusProbationModalComponent} from "../modals/status-probation-modal/status-probation-modal.component";
+import {SearchTextService} from "./search-text.service";
 
 
 @Component({
@@ -38,18 +39,39 @@ export class ColeguesTableComponent implements OnInit {
 
   user: User = new User()
 
+  click = {
+    "PASSED" : false,
+    "FAILED" : false,
+    "IN_PROGRESS" : false
+  }
 
-  constructor(private coleguesTableService: ColeguesTableService, public dialog: MatDialog, private appService: AppService) {
+  selectedStates: string = ""
+
+  allUsers : User[];
+
+  choosenUserId : string
+
+
+  constructor(private coleguesTableService: ColeguesTableService,
+              public dialog: MatDialog,
+              private appService: AppService,
+              private searchTextService : SearchTextService) {
   }
 
   ngOnInit() {
 
     this.appService.currentUser.subscribe(user => this.user = user)
 
-    console.log("INIT colegue-table")
+    console.log("User from nginit", this.user)
+
+    this.coleguesTableService.getAllUsers().subscribe((allUsers)=> {
+      this.allUsers = allUsers
+    })
+
+    this.choosenUserId = this.user.userId
 
     // TODO тут разобраться как это рабоатет и как убрать депрекейтет
-    combineLatest(this.coleguesTableService.getColegues(this.user.userId))
+    combineLatest(this.coleguesTableService.getColegues(this.user.userId, this.selectedStates))
       .subscribe(([colegues]) => {
         this.colegues = colegues;
         if(colegues == null) {
@@ -74,9 +96,9 @@ export class ColeguesTableComponent implements OnInit {
           this.controlPointsDef = data
         })
     }
-
-
   }
+
+
 
   getColorByStatus(colegueId: bigint, pointId: bigint): any {
 
@@ -110,7 +132,7 @@ export class ColeguesTableComponent implements OnInit {
   }
 
   openPointDialog(colegueId: bigint, pointId: bigint) {
-
+    console.log(this.colegues)
     this.choosenColeguesControlPoint = this.coleguesControlPoint.find((it) =>
       colegueId === it.colegueId
     ) as ColeguesControlPoints;
@@ -126,7 +148,8 @@ export class ColeguesTableComponent implements OnInit {
       data: {
         comment: this.choosenControlPoint.comment,
         status: this.choosenControlPoint.status,
-        colegueId: this.choosenColeguesControlPoint.colegueId
+        colegueId: this.choosenColeguesControlPoint.colegueId,
+        probationStatus : this.colegues.find((it) => it.id == colegueId)?.probationStatusId.id
       },
     });
 
@@ -169,5 +192,73 @@ export class ColeguesTableComponent implements OnInit {
         //   .subscribe();
       }
     })
+  }
+
+  useFilter() {
+    this.selectedStates = ""
+    for (let clickKey in this.click) {
+      if(this.click[clickKey]) {
+        this.selectedStates += this.selectedStates == "" ? clickKey : "," + clickKey
+      }
+    }
+
+    // TODO тут разобраться как это рабоатет и как убрать депрекейтет
+    combineLatest(this.coleguesTableService.getColegues(this.choosenUserId, this.selectedStates))
+      .subscribe(([colegues]) => {
+        this.colegues = colegues;
+        if(colegues == null) {
+          return;
+        }
+        let coleguesIds = colegues.map(item => {
+          return item.id
+        })
+
+        for (const colegueIdKey in coleguesIds) {
+          this.coleguesTableService.getControlPointsByColegue(coleguesIds[colegueIdKey].toString()).subscribe(data => {
+            this.coleguesControlPoint[this.coleguesControlPoint.length] = data != null
+              ? data
+              : new ColeguesControlPoints().coleguesControlPoints(coleguesIds[colegueIdKey], [])
+          })
+        }
+      });
+  }
+
+  getAdminPanel() : any {
+    // console.log("get admin panel - ", this.user.userRole)
+    if(this.user.userRole != "ROLE_ADMIN") {
+      // console.log("Not a admin ", this.user)
+      return "none";
+    }
+  // console.log(this.allUsers)
+    return "flex"
+  }
+
+  aaaa() {
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa")
+    console.log(this.choosenUserId)
+    // TODO тут разобраться как это рабоатет и как убрать депрекейтет
+    combineLatest(this.coleguesTableService.getColegues(this.choosenUserId, this.selectedStates))
+      .subscribe(([colegues]) => {
+        this.colegues = colegues;
+        if(colegues == null) {
+          return;
+        }
+        let coleguesIds = colegues.map(item => {
+          return item.id
+        })
+
+        for (const colegueIdKey in coleguesIds) {
+          this.coleguesTableService.getControlPointsByColegue(coleguesIds[colegueIdKey].toString()).subscribe(data => {
+            this.coleguesControlPoint[this.coleguesControlPoint.length] = data != null
+              ? data
+              : new ColeguesControlPoints().coleguesControlPoints(coleguesIds[colegueIdKey], [])
+          })
+        }
+      });
+  }
+
+  updateSearchText(serachText : string) {
+    // console.log("Вводим текст поиска")
+    // this.searchTextService.updateSearch(serachText)
   }
 }

@@ -97,3 +97,21 @@ body {
   /*position: absolute;*/
 }
 
+#tableContainer {
+  margin-top: 0;
+ }
+
+.filter-btns label {
+  margin-right: 10px;
+  border-radius: 3px;
+  background-color: #146c43;
+  padding: 2px 10px;
+}
+
+.filter-btns label.asdasd {
+  /*margin-right: 10px;*/
+  /*border-radius: 3px;*/
+  background-color: #4f645b !important;
+  /*padding: 2px 10px;*/
+}
+
