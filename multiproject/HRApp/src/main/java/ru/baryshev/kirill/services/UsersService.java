@@ -10,7 +10,9 @@ import ru.baryshev.kirill.repositories.RoleRepository;
 import ru.baryshev.kirill.repositories.UserRepository;
 import ru.baryshev.kirill.dto.users.UsersDto;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -61,5 +63,12 @@ public class UsersService {
             }
         }
         return null;
+    }
+
+    public List<UsersDto> findAllUsers() {
+        List<UserEntity> all = userRepository.findAll();
+        return all.stream()
+                .map(UsersDto.CONVERTER::from)
+                .collect(Collectors.toList());
     }
 }

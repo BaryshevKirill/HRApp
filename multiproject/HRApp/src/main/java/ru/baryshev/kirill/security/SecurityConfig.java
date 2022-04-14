@@ -11,6 +11,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 
 @Configuration
@@ -27,29 +33,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/users/**").permitAll()
-                .antMatchers("/InterviewInfo/**").permitAll()
-                .antMatchers("/*").permitAll()
+                .antMatchers("/users/findAllUsers").hasAnyRole("ADMIN")
+                .antMatchers("/InterviewInfo/**").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/api/auth/login").permitAll()
-                .antMatchers("/ControlPoints/**").permitAll()
+                .antMatchers("/api/auth/register").hasRole("ADMIN")
+                .antMatchers("/ControlPoints/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .apply(jwtConfig);
-
-//                .and()
-//                .antMatchers("/register").hasRole("ADMIN")
-//                .antMatchers("/InterviewInfo/*").hasRole("USER")
-//                .antMatchers("/users/*").hasRole("ADMIN")
-//                .antMatchers("/auth").permitAll()
-//                .and()
-//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -61,5 +63,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Collections.singletonList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+        configuration.setExposedHeaders(Collections.singletonList("x-auth-token"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

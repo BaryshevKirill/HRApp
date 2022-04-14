@@ -6,14 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.baryshev.kirill.dto.interviewinfo.ColleguesInfoDto;
 import ru.baryshev.kirill.dto.users.UsersDto;
 import ru.baryshev.kirill.entities.ColleguesInfoEntity;
+import ru.baryshev.kirill.entities.ProbationStatusesEntity;
 import ru.baryshev.kirill.entities.UserEntity;
+import ru.baryshev.kirill.enums.ProbationStatusesEnum;
 import ru.baryshev.kirill.repositories.ColleguesInfoRepository;
 import ru.baryshev.kirill.repositories.DepartmentsRepository;
 import ru.baryshev.kirill.repositories.UserRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,19 +22,26 @@ public class InterviewInfoService {
 
     @Autowired
     ColleguesInfoRepository colleguesInfoRepository;
-    //
-//    @Autowired
-//    RoleRepository roleRepository;
-//
+
     @Autowired
     UserRepository userRepository;
-    //
+
     @Autowired
     DepartmentsRepository departmentsRepository;
 
     public ColleguesInfoEntity createInterviewInfo(ColleguesInfoEntity interviewInfo) {
         return colleguesInfoRepository.save(interviewInfo);
     }
+
+    public ColleguesInfoEntity updateInterviewInfo(ColleguesInfoEntity dto) {
+        return colleguesInfoRepository.save(dto);
+    }
+
+//    public ColleguesInfoEntity updateInterviewInfo(UpdateColegueInfoDto dto) {
+//        ColleguesInfoEntity value = colleguesInfoRepository.findById(dto.getId()).orElseThrow(NoSuchElementException::new);
+//
+//        return colleguesInfoRepository.save(interviewInfo);
+//    }
 
 //    public ColleguesInfoEntity createInterviewInfo(ColleguesInfoDto colleguesInfoDto) {
 //        UserEntity userEntity = userRepository.findById(colleguesInfoDto.getUserId())
@@ -47,27 +55,53 @@ public class InterviewInfoService {
 //    }
 
 
-    public List<ColleguesInfoDto> findByUserId(Long userId) {
+    public List<ColleguesInfoDto> findByUserId(Long userId, String selectedStates) {
+        List<ProbationStatusesEntity> collect;
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userId);
-        List<ColleguesInfoEntity> colleguesInfoEntity = colleguesInfoRepository.findByUserId(userEntity)
-                .orElseThrow(() -> new NoSuchElementException("Not found in DB ColleguesInfoEntity with userId " + userId));
-        List<ColleguesInfoDto> colleguesInfoDto = new ArrayList<>();
 
-        colleguesInfoEntity.forEach((it) -> {
-                    ColleguesInfoDto item = new ColleguesInfoDto();
-                    item.setId(it.getId());
-                    item.setUserId(UsersDto.CONVERTER.from(it.getUserId()));
-                    item.setColleagueName(it.getColleagueName());
-                    item.setPositionId(it.getPositionId());
-                    item.setDepartmentId(it.getDeparmentId());
-                    item.setProbationaryPeriodFrom(it.getProbationaryPeriodFrom());
-                    item.setProbationaryPeriodTo(it.getProbationaryPeriodTo());
-                    colleguesInfoDto.add(item);
-                }
-        );
-
-        return colleguesInfoDto;
+        try {
+            if (selectedStates == null || selectedStates.isEmpty()) {
+                collect = Arrays.stream(ProbationStatusesEnum.values()).map((it) -> {
+                    return new ProbationStatusesEntity(
+                            it.getId(),
+                            it.name(),
+                            it.getDefRus()
+                    );
+                }).collect(Collectors.toList());
+            } else {
+                collect = Arrays.stream(selectedStates.split(","))
+                        .map((it) -> {
+                                    ProbationStatusesEnum probationStatusesEnum = ProbationStatusesEnum.valueOf(it);
+                                    return new ProbationStatusesEntity(
+                                            probationStatusesEnum.getId(),
+                                            probationStatusesEnum.name(),
+                                            probationStatusesEnum.getDefRus()
+                                    );
+                                }
+                        )
+                        .collect(Collectors.toList());
+            }
+            List<ColleguesInfoEntity> colleguesInfoEntity = colleguesInfoRepository.findByUserIdAndProbationStatusIdIn(userEntity, collect)
+                    .orElseThrow(() -> new NoSuchElementException("Not found in DB ColleguesInfoEntity with userId " + userId));
+            List<ColleguesInfoDto> colleguesInfoDto = new ArrayList<>();
+            colleguesInfoEntity.forEach((it) -> {
+                        ColleguesInfoDto item = new ColleguesInfoDto();
+                        item.setId(it.getId());
+                        item.setUserId(UsersDto.CONVERTER.from(it.getUserId()));
+                        item.setColleagueName(it.getColleagueName());
+                        item.setPositionId(it.getPositionId());
+                        item.setDepartmentId(it.getDeparmentId());
+                        item.setProbationStatusId(it.getProbationStatusId());
+                        item.setProbationaryPeriodFrom(it.getProbationaryPeriodFrom());
+                        item.setProbationaryPeriodTo(it.getProbationaryPeriodTo());
+                        colleguesInfoDto.add(item);
+                    }
+            );
+            return colleguesInfoDto;
+        } catch (NoSuchElementException ex) {
+            return Collections.emptyList();
+        }
     }
 
     public ColleguesInfoEntity findById(Long id) {

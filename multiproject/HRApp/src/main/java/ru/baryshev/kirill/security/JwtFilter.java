@@ -1,5 +1,6 @@
 package ru.baryshev.kirill.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +33,7 @@ public class JwtFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         logger.info("do filter...");
+
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         try {
             if (token != null && jwtProvider.validateToken(token)) {
@@ -43,15 +45,19 @@ public class JwtFilter extends GenericFilterBean {
         } catch (AuthenticationException e) {
             SecurityContextHolder.clearContext();
             ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN);
+        } catch (ExpiredJwtException expEx) {
+            log.severe("Token expired" + expEx);
+            ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
-        String bearer = request.getHeader(AUTHORIZATION);
-        if (hasText(bearer) && bearer.startsWith("Bearer ")) {
-            return bearer.substring(7);
-        }
-        return null;
+//        String bearer = request.getHeader(AUTHORIZATION);
+//        if (hasText(bearer) && bearer.startsWith("Bearer ")) {
+//            return bearer.substring(7);
+//        }
+//        return null;
+        return request.getHeader(AUTHORIZATION);
     }
 }

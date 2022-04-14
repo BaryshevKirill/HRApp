@@ -46,6 +46,10 @@ public class ColleguesInfoEntity implements Serializable {
     @JsonFormat(pattern="dd.MM.yyyy")
     private Date probationaryPeriodTo;
 
+    @OneToOne
+    @JoinColumn(name = "probation_status_id")
+    private ProbationStatusesEntity probationStatusId;
+
     @Column(name = "navi_date", insertable = false)
     private Date naviDate;
 }

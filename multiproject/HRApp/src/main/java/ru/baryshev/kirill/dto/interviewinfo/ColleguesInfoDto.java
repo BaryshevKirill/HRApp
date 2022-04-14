@@ -8,6 +8,7 @@ import ru.baryshev.kirill.dto.users.UsersDto;
 import ru.baryshev.kirill.entities.ColleguesInfoEntity;
 import ru.baryshev.kirill.entities.DepartmentsEntity;
 import ru.baryshev.kirill.entities.PositionsEntity;
+import ru.baryshev.kirill.entities.ProbationStatusesEntity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -28,11 +29,15 @@ public class ColleguesInfoDto implements Serializable {
 
     private DepartmentsEntity departmentId;
 
+    private ProbationStatusesEntity probationStatusId;
+
     @JsonFormat(pattern="dd.MM.yyyy")
     private Date probationaryPeriodFrom;
 
     @JsonFormat(pattern="dd.MM.yyyy")
     private Date probationaryPeriodTo;
+
+
 
 //    public static Converter CONVERTER = Mappers.getMapper(Converter.class);
 

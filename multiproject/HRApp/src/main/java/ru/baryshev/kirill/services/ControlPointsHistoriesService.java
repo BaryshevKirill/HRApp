@@ -1,5 +1,6 @@
 package ru.baryshev.kirill.services;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.baryshev.kirill.dto.ColeguesControlPointDto;
@@ -16,6 +17,7 @@ import ru.baryshev.kirill.repositories.ControlPointsRepository;
 import java.util.*;
 
 @Service
+@Log4j2
 public class ControlPointsHistoriesService {
 
     @Autowired
@@ -40,9 +42,9 @@ public class ControlPointsHistoriesService {
         coleguesControlPointDto.setColegueId(id);
 
         controlPointsHistoriesEntityList.forEach((it) -> {
-            if(it.getIsActual()) {
-                coleguesControlPointDto.setControlPoints(it.getControlPointStatusId().getDef(), it.getComment(), it.getControllPointId());
-            }
+                    if (it.getIsActual()) {
+                        coleguesControlPointDto.setControlPoints(it.getControlPointStatusId().getDef(), it.getComment(), it.getControllPointId());
+                    }
                 }
         );
         return coleguesControlPointDto;
@@ -58,7 +60,15 @@ public class ControlPointsHistoriesService {
         try {
             ControlPointsHistoriesEntity byControllPointIdAndCollegueInfoId = controlPointHistoryRepository.findByControllPointIdAndCollegueInfoIdAndIsActual(byId, byId1, true)
                     .orElseThrow(() -> new NoSuchElementException(String.format("Отсутствует более ранняя запись с control_point_id = %s и colegue_info_id = %s", byId.getId(), byId1.getId())));
+
+            if (byControllPointIdAndCollegueInfoId.getComment().equals(saveInfoControlPointDto.getComment())
+                    && byControllPointIdAndCollegueInfoId.getControlPointStatusId().getDef().equals(saveInfoControlPointDto.getStatus())) {
+                log.info("Nothing to change for: " + saveInfoControlPointDto);
+                return;
+            }
+
             byControllPointIdAndCollegueInfoId.setIsActual(!byControllPointIdAndCollegueInfoId.getIsActual());
+            byControllPointIdAndCollegueInfoId.setUpdateDate(new Date());
             controlPointHistoryRepository.save(byControllPointIdAndCollegueInfoId);
         } catch (NoSuchElementException ex) {
             ex.printStackTrace();

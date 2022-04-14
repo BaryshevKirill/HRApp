@@ -1,0 +1,44 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!--Таблица записей контрольных точек-->
+    <changeSet id="31" author="Kirill">
+        <createTable tableName="probation_statuses">
+            <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="def" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="navi_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="roles"/>
+        </rollback>
+    </changeSet>
+
+    <!--Заполнение таблицы roles знаечниями по умолчанию-->
+    <changeSet id="32" author="Kirill">
+        <sql>
+            insert into probation_statuses (name, def) values('IN_PROCESS','В процессе'),('PASSED','Пройден'), ('FAILED', 'Не пройден');
+        </sql>
+    </changeSet>
+
+    <changeSet id="21" author="Kirill">
+        <addColumn tableName="collegues_info">
+            <column name="probation_status_id" type="BIGINT" defaultValue="1">
+                <constraints foreignKeyName="fk_probation_status_id" references="probation_statuses(id)" nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

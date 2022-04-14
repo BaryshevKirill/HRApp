@@ -8,6 +8,8 @@ import org.mapstruct.factory.Mappers;
 import ru.baryshev.kirill.entities.ColleguesInfoEntity;
 import ru.baryshev.kirill.entities.UserEntity;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class UsersDto {
