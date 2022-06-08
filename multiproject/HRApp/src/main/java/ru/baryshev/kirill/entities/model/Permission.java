@@ -1,5 +1,6 @@
 package ru.baryshev.kirill.entities.model;
 
+//TODO реализовать безопасность не через роли а через доступы
 public enum Permission {
     DEVELOPERS_READ("developers:read"),
     DEVELOPERS_WRITE("developers:write");

@@ -16,12 +16,12 @@ public class CustomUserDetails implements UserDetails {
     private Boolean isActive;
 
     public static CustomUserDetails fromUserEntityToCustomUserDetails(UserEntity userEntity) {
-        CustomUserDetails c = new CustomUserDetails();
-        c.login = userEntity.getUserLogin();
-        c.password = userEntity.getUserPassword();
-        c.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(userEntity.getRoleEntity().getName()));
-        c.isActive = userEntity.getIsActive();
-        return c;
+        CustomUserDetails cud = new CustomUserDetails();
+        cud.login = userEntity.getUserLogin();
+        cud.password = userEntity.getUserPassword();
+        cud.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(userEntity.getRoleEntity().getName()));
+        cud.isActive = userEntity.getIsActive();
+        return cud;
     }
 
     @Override

@@ -2,8 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {DialogDataBase, Modal} from "../modal";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ProbationStatusId} from "../../models/colegue-table/colegues-table";
-import {ProbationStatuses} from "../../enums/probation-statuses";
 
+// export interface StatusProbationDialogData extends DialogDataBase{
 export interface StatusProbationDialogData extends DialogDataBase{
   colegueId: bigint
   status: ProbationStatusId
@@ -43,7 +43,7 @@ export class StatusProbationModalComponent extends Modal<StatusProbationDialogDa
       case this.probationStatusesEnum.FAILED : return "Не пройден"
       case this.probationStatusesEnum.PASSED : return "Пройден"
       case this.probationStatusesEnum.IN_PROGRESS : return "В процессе"
-      default : return "Не известный статус"
+      default : return "Неизвестный статус"
     }
   }
 }

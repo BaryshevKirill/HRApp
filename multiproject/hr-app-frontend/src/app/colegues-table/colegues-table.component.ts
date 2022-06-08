@@ -47,6 +47,8 @@ export class ColeguesTableComponent implements OnInit {
 
   selectedStates: string = ""
 
+  searchText: string = ""
+
   allUsers : User[];
 
   choosenUserId : string
@@ -71,7 +73,7 @@ export class ColeguesTableComponent implements OnInit {
     this.choosenUserId = this.user.userId
 
     // TODO тут разобраться как это рабоатет и как убрать депрекейтет
-    combineLatest(this.coleguesTableService.getColegues(this.user.userId, this.selectedStates))
+    combineLatest(this.coleguesTableService.getColegues(this.user.userId, this.selectedStates, this.searchText))
       .subscribe(([colegues]) => {
         this.colegues = colegues;
         if(colegues == null) {
@@ -203,7 +205,7 @@ export class ColeguesTableComponent implements OnInit {
     }
 
     // TODO тут разобраться как это рабоатет и как убрать депрекейтет
-    combineLatest(this.coleguesTableService.getColegues(this.choosenUserId, this.selectedStates))
+    combineLatest(this.coleguesTableService.getColegues(this.choosenUserId, this.selectedStates, this.searchText))
       .subscribe(([colegues]) => {
         this.colegues = colegues;
         if(colegues == null) {
@@ -237,7 +239,7 @@ export class ColeguesTableComponent implements OnInit {
     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa")
     console.log(this.choosenUserId)
     // TODO тут разобраться как это рабоатет и как убрать депрекейтет
-    combineLatest(this.coleguesTableService.getColegues(this.choosenUserId, this.selectedStates))
+    combineLatest(this.coleguesTableService.getColegues(this.choosenUserId, this.selectedStates, this.searchText))
       .subscribe(([colegues]) => {
         this.colegues = colegues;
         if(colegues == null) {
@@ -258,7 +260,7 @@ export class ColeguesTableComponent implements OnInit {
   }
 
   updateSearchText(serachText : string) {
-    // console.log("Вводим текст поиска")
-    // this.searchTextService.updateSearch(serachText)
+    console.log("Вводим текст поиска")
+    this.searchTextService.updateSearch(serachText)
   }
 }

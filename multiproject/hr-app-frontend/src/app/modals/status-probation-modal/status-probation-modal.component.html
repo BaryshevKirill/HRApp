@@ -6,8 +6,8 @@
   <form #myForm="ngForm" (ngSubmit)="saveModal()">
     <div>
       <mat-form-field appearance="fill">
-<!--        <mat-label>Choose an option</mat-label>-->
-        <mat-select value="{{data.status.id}}">
+        <mat-select [(value)]="data.status.id">
+<!--        <mat-select [(value)]="">-->
           <mat-option
             value="{{probationStatusesEnum.PASSED}}">{{getRusStatus(probationStatusesEnum.PASSED)}}</mat-option>
           <mat-option
@@ -17,6 +17,7 @@
         </mat-select>
       </mat-form-field>
       <hr>
+      <p>{{data.status.id}}</p>
       <div style="position:relative; width: inherit">
         <button class="btn-success" mat-button type="submit">Подтвердить</button>
       </div>

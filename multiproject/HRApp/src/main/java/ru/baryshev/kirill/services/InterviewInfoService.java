@@ -55,7 +55,7 @@ public class InterviewInfoService {
 //    }
 
 
-    public List<ColleguesInfoDto> findByUserId(Long userId, String selectedStates) {
+    public List<ColleguesInfoDto> findByUserId(Long userId, String selectedStates, String searchText) {
         List<ProbationStatusesEntity> collect;
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userId);

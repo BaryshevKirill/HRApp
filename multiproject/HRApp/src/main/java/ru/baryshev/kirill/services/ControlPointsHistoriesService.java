@@ -51,15 +51,16 @@ public class ControlPointsHistoriesService {
     }
 
     public void saveControlPointInfo(SaveInfoControlPointDto saveInfoControlPointDto) {
-        ControlPointsEntity byId = controlPointsRepository.findById(saveInfoControlPointDto.getControlPointId())
+        ControlPointsEntity controlPointsEntity = controlPointsRepository.findById(saveInfoControlPointDto.getControlPointId())
                 .orElseThrow(NoSuchElementException::new);
         ControlPointStatusesEntity byDef = controlPointStatusesRepository.findByDef(saveInfoControlPointDto.getStatus());
-        ColleguesInfoEntity byId1 = colleguesInfoRepository.findById(saveInfoControlPointDto.getColegueId())
+        ColleguesInfoEntity colleguesInfoEntity = colleguesInfoRepository.findById(saveInfoControlPointDto.getColegueId())
                 .orElseThrow(NoSuchElementException::new);
 
         try {
-            ControlPointsHistoriesEntity byControllPointIdAndCollegueInfoId = controlPointHistoryRepository.findByControllPointIdAndCollegueInfoIdAndIsActual(byId, byId1, true)
-                    .orElseThrow(() -> new NoSuchElementException(String.format("Отсутствует более ранняя запись с control_point_id = %s и colegue_info_id = %s", byId.getId(), byId1.getId())));
+            ControlPointsHistoriesEntity byControllPointIdAndCollegueInfoId = controlPointHistoryRepository
+                    .findByControllPointIdAndCollegueInfoIdAndIsActual(controlPointsEntity, colleguesInfoEntity, true)
+                    .orElseThrow(() -> new NoSuchElementException(String.format("Отсутствует более ранняя запись с control_point_id = %s и colegue_info_id = %s", controlPointsEntity.getId(), colleguesInfoEntity.getId())));
 
             if (byControllPointIdAndCollegueInfoId.getComment().equals(saveInfoControlPointDto.getComment())
                     && byControllPointIdAndCollegueInfoId.getControlPointStatusId().getDef().equals(saveInfoControlPointDto.getStatus())) {
@@ -75,13 +76,11 @@ public class ControlPointsHistoriesService {
         }
 
         ControlPointsHistoriesEntity entity = new ControlPointsHistoriesEntity();
-        entity.setControllPointId(byId);
-        entity.setCollegueInfoId(byId1);
+        entity.setControllPointId(controlPointsEntity);
+        entity.setCollegueInfoId(colleguesInfoEntity);
         entity.setControlPointStatusId(byDef);
         entity.setComment(saveInfoControlPointDto.getComment());
         entity.setUpdateDate(new Date());
         controlPointHistoryRepository.save(entity);
     }
-
-
 }

@@ -3,6 +3,8 @@ package ru.baryshev.kirill;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+//TODO надо бы автоваред вынести с полей в конструкторы
+
 @SpringBootApplication
 public class Main {
 

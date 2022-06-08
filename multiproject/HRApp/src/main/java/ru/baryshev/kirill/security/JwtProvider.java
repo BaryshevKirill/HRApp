@@ -17,6 +17,8 @@ import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 
+//TODO надо разобраться со вторым токеном для обновления и дописать
+
 @Component
 @Log
 public class JwtProvider {
@@ -34,16 +36,6 @@ public class JwtProvider {
     protected void init() {
         jwtSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
     }
-
-//    public String generateToken(String login) {
-//        Date date = Date.from(LocalDateTime.now().plusHours(8).atZone(ZoneId.systemDefault()).toInstant());
-//        return Jwts.builder()
-//                .setSubject(login)
-//                .setIssuedAt(new Date())
-//                .setExpiration(date)
-//                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-//                .compact();
-//    }
 
     public String generateToken(String login, String role) {
 

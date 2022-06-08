@@ -7,6 +7,8 @@ import ru.baryshev.kirill.entities.UserEntity;
 
 import java.util.Optional;
 
+//TODO переписать все через Optional
+
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 

@@ -40,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+//                TODO надо парочку матчеров через аннтоации
                 .antMatchers("/").permitAll()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/users/**").permitAll()

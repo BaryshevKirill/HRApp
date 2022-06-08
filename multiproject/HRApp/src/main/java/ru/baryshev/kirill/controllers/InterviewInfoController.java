@@ -46,8 +46,9 @@ public class InterviewInfoController {
     @GetMapping("/findByUserId/{userName}")
     public ResponseEntity<List<ColleguesInfoDto>> findUserByUserName(
             @PathVariable(value = "userName") Long userId,
-            @RequestParam(value = "selectedStates", required = false) String selectedStates) {
-        List<ColleguesInfoDto> list = interviewInfoService.findByUserId(userId, selectedStates);
+            @RequestParam(value = "selectedStates", required = false) String selectedStates,
+            @RequestParam(value = "searchText", required = false) String searchText) {
+        List<ColleguesInfoDto> list = interviewInfoService.findByUserId(userId, selectedStates, searchText);
         if (list.size() == 0) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(list);
         }

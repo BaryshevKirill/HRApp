@@ -32,12 +32,15 @@ export class ColeguesTableService {
     this.getAllUsersUrl = '/api/users/findAllUsers';
   }
 
-  public getColegues(userId: string, selectedStates : string): Observable<ColeguesTable[]> {
+  public getColegues(userId: string,
+                     selectedStates : string,
+                     searchText : string): Observable<ColeguesTable[]> {
     console.log("База дай мне сил")
     console.log(selectedStates)
     let queryParams = new HttpParams();
     // queryParams = queryParams.append("page",1);
     queryParams = queryParams.append("selectedStates", selectedStates)
+    queryParams = queryParams.append("searchText", searchText)
     return this.httpClient.get<ColeguesTable[]>(this.getColeguesUrl + userId,{params : queryParams});
   }
 

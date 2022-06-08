@@ -1,7 +1,7 @@
 import {Component, Inject, Injectable, ViewChild} from "@angular/core";
 import {NgForm} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {ProbationStatuses} from "../enums/probation-statuses";
+import {ProbationStatuses, ProbationStatusesRus} from "../enums/probation-statuses";
 // import {DialogData} from "./point-info-modal/point-info-modal.component";
 
 export interface DialogDataBase {
@@ -13,6 +13,9 @@ export abstract class Modal <E extends DialogDataBase> {
   public data : E
 
   probationStatusesEnum = ProbationStatuses
+
+  probationStatusesRusEnum = ProbationStatusesRus
+
 
   isClickedSave: boolean = false
 
@@ -28,6 +31,7 @@ export abstract class Modal <E extends DialogDataBase> {
   saveModal() {
     this.isClickedSave = true;
     if (this.isValid()) {
+      console.log("isvalid and close")
       this.dialogRef.close(this.data)
     } else {
       console.log("Не все обязательные поля заполнены")
